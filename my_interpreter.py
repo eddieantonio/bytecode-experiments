@@ -28,6 +28,11 @@ def run_python_bytecode(c: MyCodeObject) -> object:
         elif opcode == 0x7c:  # LOAD_FAST
             value = local_variables[arg]
             stack.append(value)
+        elif opcode == 0x17:  # BINARY_ADD
+            rhs = stack.pop()
+            lhs = stack.pop()
+            value = lhs + rhs
+            stack.append(value)
         else:
             raise NotImplementedError(hex(opcode))
         print("stack:", stack)
