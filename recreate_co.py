@@ -35,9 +35,12 @@ _RAW_MAGIC_NUMBER = 3394  # Python 3.7b5
 #   0002: 6401 LOAD_CONST       0x01 (<function greet()>)
 #   0004: 8400 MAKE_FUNCTION    0x00 <no flags set>
 #   0006: 5a00 STORE_NAME       0x00 (greet)
-#   0008: 6400 LOAD_CONST       0x02 (None)
+#   0008: 6402 LOAD_CONST       0x02 (None)
+#   000a: 5300 RETURN_VALUE     0x00 [ignored]
 # 00000020: 0040 0000 0073 0c00 0000 6400 6401 8400  .@...s....d.d...
-# 00000030: 5a00 6402 5300 2903                      Z.d.S.).
+# 00000030: 5a00 6402 5300                           Z.d.S.
+# co_consts              =    (<code object greet>,
+# 00000036:                2903                            ).
 
 # == Code object [greet()] ==
 co_argcount =                     0
@@ -109,11 +112,13 @@ co_firstlineno = 4
 # == encoding addr<->lineno mapping ==
 co_lnotab =                b'\x00\x01\x04\x01\x04\x01\x0c\x02'
 # 000000d2:      7308 0000 0000 0104 0104 010c 02    ..s............
+
+# == stuff AFTER the code object! ==
+# == inside the module's constant table ==
+#           'greet', # dereference 0x05
 # 000000d2:                                      72                 r
 # 000000e0: 0500 0000
-
-# == stuff AFTER the code object we care about! ==
-# == probably inside the module's constant table ==
+#                     None)
 # 000000e4:           4e29 0172 0500 0000 7203 0000      N).r....r...
 # 000000f0: 0072 0300 0000 7203 0000 0072 0400 0000  .r....r....r....
 # 00000100: da08 3c6d 6f64 756c 653e 0400 0000 7300  ..<module>....s.
