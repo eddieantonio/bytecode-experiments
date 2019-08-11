@@ -1,0 +1,20 @@
+Disassembly of <code object greet at 0x10a165930, file "greetings.py", line 1>:
+  2           0 LOAD_CONST               1 ('Hello')
+              2 STORE_FAST               0 (greeting)
+
+  3           4 LOAD_CONST               2 ('World')
+              6 STORE_FAST               1 (recipient)
+
+  4           8 LOAD_FAST                0 (greeting)
+             10 LOAD_CONST               3 (' ')
+             12 BINARY_ADD
+             14 LOAD_FAST                1 (recipient)
+             16 BINARY_ADD
+             18 STORE_FAST               2 (sentence)
+
+  6          20 LOAD_GLOBAL              0 (print)
+             22 LOAD_FAST                2 (sentence)
+             24 CALL_FUNCTION            1
+             26 POP_TOP
+             28 LOAD_CONST               0 (None)
+             30 RETURN_VALUE
