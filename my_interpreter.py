@@ -25,8 +25,11 @@ def run_python_bytecode(c: MyCodeObject) -> object:
         elif opcode == 0x7d:  # STORE_FAST
             value = stack.pop()
             local_variables[arg] = value
+        elif opcode == 0x7c:  # LOAD_FAST
+            value = local_variables[arg]
+            stack.append(value)
         else:
-            raise NotImplementedError(int(opcode))
+            raise NotImplementedError(hex(opcode))
         print("stack:", stack)
         print("locals:", local_variables)
         print()
