@@ -3,6 +3,7 @@ from dataclasses import dataclass
 @dataclass
 class MyCodeObject:
     co_code: bytes
+    co_consts: tuple
 
 def run_python_bytecode(c: MyCodeObject) -> object:
     """
@@ -11,18 +12,21 @@ def run_python_bytecode(c: MyCodeObject) -> object:
     """
 
     pc = 0  # pc = program counter
+    stack = []
     
     while pc < len(c.co_code):
         opcode = c.co_code[pc]
         arg = c.co_code[pc + 1]
 
-        if opcode == ...:
-            pass
+        if opcode == 0x64:  # LOAD_CONST
+            stack.append(c.co_consts[arg])
         else:
             raise NotImplementedError(hex(opcode))
+        print(stack)
 
         pc += 2
 
 run_python_bytecode(MyCodeObject(
-    co_code=b'd\x01}\x00d\x02}\x01|\x00d\x03\x17\x00|\x01\x17\x00}\x02t\x00|\x02\x83\x01\x01\x00d\x00S\x00'
+    co_code=b'd\x01}\x00d\x02}\x01|\x00d\x03\x17\x00|\x01\x17\x00}\x02t\x00|\x02\x83\x01\x01\x00d\x00S\x00',
+    co_consts=(None, 'Hello', 'World', ' ')
 ))
