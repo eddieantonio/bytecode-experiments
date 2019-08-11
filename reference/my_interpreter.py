@@ -21,12 +21,14 @@ def run_python_bytecode(c: MyCodeObject) -> object:
     value_stack = []
     local_variables = [None] * c.co_nlocals
 
-    while program_counter < len(c.co_code):
+    while True:
+        # Fetch instruction and argument
         opcode = c.co_code[program_counter]
         arg = c.co_code[program_counter + 1]
 
         if opcode == opmap['LOAD_CONST']:
-            value_stack.append(c.co_consts[arg])
+            value = c.co_consts[arg]
+            value_stack.append(value)
         elif opcode == opmap['STORE_FAST']:
             value = value_stack.pop()
             local_variables[arg] = value
@@ -51,14 +53,14 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             args = []
             for _ in range(arg):
                 args.append(value_stack.pop())
-            assert len(value_stack) >= 1
             function = value_stack.pop()
             value = function(*args)
             value_stack.append(value)
         elif opcode == opmap['POP_TOP']:
             value_stack.pop()
         elif opcode == opmap['RETURN_VALUE']:
-            return value_stack.pop()
+            value = value_stack.pop()
+            return value
         else:
             raise NotImplementedError(opname[opcode])
 
