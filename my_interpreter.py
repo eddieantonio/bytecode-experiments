@@ -57,9 +57,6 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             return stack.pop()
         else:
             raise NotImplementedError(hex(opcode))
-        print("stack:", stack)
-        print("locals:", local_variables)
-        print()
 
         pc += 2
 
