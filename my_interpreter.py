@@ -53,6 +53,8 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             stack.append(value)
         elif opcode == 0x01:  # POP_TOP
             stack.pop()
+        elif opcode == 0x53:  # RETURN_VALUE
+            return stack.pop()
         else:
             raise NotImplementedError(hex(opcode))
         print("stack:", stack)
