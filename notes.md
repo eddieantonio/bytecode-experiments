@@ -1,5 +1,3 @@
-https://github.com/python/cpython/blob/3.7/Python/ceval.c
-
 Compilation stages:
 
     1. lexical analysis (keywords, variables, indentation)
@@ -13,3 +11,9 @@ Compilation stages:
     4. PYC generation: code object -> written to file
         a. generate header [magic number + hash || modified date + size]
         b. marshal code object
+
+Links
+=====
+
+`__pycache__`: https://www.python.org/dev/peps/pep-3147/
+`ceval.c`: https://github.com/python/cpython/blob/3.7/Python/ceval.c
