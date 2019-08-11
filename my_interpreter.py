@@ -43,6 +43,14 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             else:
                 raise NameError(f'name {name} is not defined')
             stack.append(value)
+        elif opcode == 0x83:  # CALL_FUNCTION
+            argv = []
+            for _ in range(arg):
+                argv.append(stack.pop())
+            assert len(stack) >= 1
+            function = stack.pop()
+            value = function(*argv)
+            stack.append(value)
         else:
             raise NotImplementedError(hex(opcode))
         print("stack:", stack)
