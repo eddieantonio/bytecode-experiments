@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from opcode import opmap, opname
 
 @dataclass
 class MyCodeObject:
@@ -16,25 +17,25 @@ def run_python_bytecode(c: MyCodeObject) -> object:
     pc = 0  # pc = program counter
     stack = []
     local_variables = [None] * c.co_nlocals
-    
+
     while pc < len(c.co_code):
         opcode = c.co_code[pc]
         arg = c.co_code[pc + 1]
 
-        if opcode == 0x64:  # LOAD_CONST
+        if opcode == opmap['LOAD_CONST']:
             stack.append(c.co_consts[arg])
-        elif opcode == 0x7d:  # STORE_FAST
+        elif opcode == opmap['STORE_FAST']:
             value = stack.pop()
             local_variables[arg] = value
-        elif opcode == 0x7c:  # LOAD_FAST
+        elif opcode == opmap['LOAD_FAST']:
             value = local_variables[arg]
             stack.append(value)
-        elif opcode == 0x17:  # BINARY_ADD
+        elif opcode == opmap['BINARY_ADD']:
             rhs = stack.pop()
             lhs = stack.pop()
             value = lhs + rhs
             stack.append(value)
-        elif opcode == 0x74:  # LOAD_GLOBAL
+        elif opcode == opmap['LOAD_GLOBAL']:
             name = c.co_names[arg]
             if name in globals():
                 value = globals()[name]
@@ -43,7 +44,7 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             else:
                 raise NameError(f'name {name} is not defined')
             stack.append(value)
-        elif opcode == 0x83:  # CALL_FUNCTION
+        elif opcode == opmap['CALL_FUNCTION']:
             argv = []
             for _ in range(arg):
                 argv.append(stack.pop())
@@ -51,12 +52,12 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             function = stack.pop()
             value = function(*argv)
             stack.append(value)
-        elif opcode == 0x01:  # POP_TOP
+        elif opcode == opmap['POP_TOP']:
             stack.pop()
-        elif opcode == 0x53:  # RETURN_VALUE
+        elif opcode == opmap['RETURN_VALUE']:
             return stack.pop()
         else:
-            raise NotImplementedError(hex(opcode))
+            raise NotImplementedError(opname[opcode])
 
         pc += 2
 
