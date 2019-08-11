@@ -3,10 +3,11 @@ CO_OPTIMIZED = 0x0001
 CO_NEWLOCALS = 0x0002
 CO_NOFREE    = 0x0040
 
+# See: https://github.com/python/cpython/blob/3.7/Include/code.h#L21-L51
 # See: https://github.com/python/cpython/blob/3.7/Lib/py_compile.py
-# See: https://www.python.org/dev/peps/pep-3147/
-# See: https://www.python.org/dev/peps/pep-0488/
 # See: https://github.com/python/cpython/blob/c48d606adcef395e59fd555496c42203b01dd3e8/Lib/importlib/_bootstrap_external.py#L252-L260
+# See: https://www.python.org/dev/peps/pep-0488/
+# See: https://www.python.org/dev/peps/pep-3147/
 
 # == .pyc header ==
 # See: https://github.com/python/cpython/blob/3.7/Lib/importlib/_bootstrap_external.py
@@ -60,6 +61,22 @@ co_flags = CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE
 co_code     = (b'd\x01}\x00d\x02}\x01|\x00d\x03\x17'
           b'\x00|\x01\x17\x00}\x02t\x00|\x02\x83\x01\x01\x00d\x00'
           b'S\x00')
+#   0000: 6401 LOAD_CONST           0x01 <push('Hello')>
+#   0002: 7d00 STORE_FAST           0x00 <locals[0] <- pop()>
+#   0004: 6402 LOAD_CONST           0x02 <push('World')>
+#   0006: 7d01 STORE_FAST           0x01 <locals[1] <- pop()>
+#   0008: 7c00 LOAD_FAST            0x00 <push(locals[0])
+#   000a: 6403 LOAD_CONST           0x03 <push(' ')>
+#   000c: 1700 BINARY_ADD           0x00 [ignored] <push(pop() + pop())>
+#   000e: 7c01 LOAD_FAST            0x01 <push(locals[1])>
+#   0010: 1700 BINARY_ADD           0x00 [ignored] <push(pop() + pop())>
+#   0012: 7d02 STORE_FAST           0x02 <locals[2] <- pop()>
+#   0014: 7400 LOAD_GLOBAL          0x00 <push(globals['print'])>
+#   0016: 7c02 LOAD_FAST            0x02 <push(locals[2])>
+#   0018: 8301 CALL_FUNCTION        0x01 <pop()(pop())>
+#   001a: 0100 POP_TOP              0x00 [ignored] <pop()>
+#   001c: 6400 LOAD_CONST           0x00 <push(None)>
+#   001e: 5300 RETURN_VALUE         0x00 [ignored] <return pop()>
 # 00000052:      6401 7d00 6402 7d01 7c00 6403 1700    d.}.d.}.|.d...
 # 00000060: 7c01 1700 7d02 7400 7c02 8301 0100 6400  |...}.t.|.....d.
 # 00000070: 5300                                     S.
