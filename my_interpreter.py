@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from opcode import opmap, opname
+from builtins import __dict__ as builtins
+
 
 @dataclass
 class MyCodeObject:
@@ -7,6 +9,7 @@ class MyCodeObject:
     co_consts: tuple
     co_nlocals: int
     co_names: tuple
+
 
 def run_python_bytecode(c: MyCodeObject) -> object:
     """
@@ -39,8 +42,8 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             name = c.co_names[arg]
             if name in globals():
                 value = globals()[name]
-            elif name in __builtins__.__dict__:
-                value = __builtins__.__dict__[name]
+            elif name in builtins:
+                value = builtins[name]
             else:
                 raise NameError(f'name {name} is not defined')
             stack.append(value)
