@@ -5,6 +5,7 @@ class MyCodeObject:
     co_code: bytes
     co_consts: tuple
     co_nlocals: int
+    co_names: tuple
 
 def run_python_bytecode(c: MyCodeObject) -> object:
     """
@@ -33,6 +34,15 @@ def run_python_bytecode(c: MyCodeObject) -> object:
             lhs = stack.pop()
             value = lhs + rhs
             stack.append(value)
+        elif opcode == 0x74:  # LOAD_GLOBAL
+            name = c.co_names[arg]
+            if name in globals():
+                value = globals()[name]
+            elif name in __builtins__.__dict__:
+                value = __builtins__.__dict__[name]
+            else:
+                raise NameError(f'name {name} is not defined')
+            stack.append(value)
         else:
             raise NotImplementedError(hex(opcode))
         print("stack:", stack)
@@ -45,5 +55,5 @@ run_python_bytecode(MyCodeObject(
     co_code=b'd\x01}\x00d\x02}\x01|\x00d\x03\x17\x00|\x01\x17\x00}\x02t\x00|\x02\x83\x01\x01\x00d\x00S\x00',
     co_consts=(None, 'Hello', 'World', ' '),
     co_nlocals=3,
-
+    co_names=('print',)
 ))
