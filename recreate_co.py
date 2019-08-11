@@ -3,10 +3,19 @@ CO_OPTIMIZED = 0x0001
 CO_NEWLOCALS = 0x0002
 CO_NOFREE    = 0x0040
 
-#
-# ???HEADER???
-# 00000000: 420d 0d0a 0000 0000 db39 4e5d ab00 0000  B........9N]....
-#
+# See: https://github.com/python/cpython/blob/3.7/Lib/py_compile.py
+# See: https://www.python.org/dev/peps/pep-3147/
+# See: https://www.python.org/dev/peps/pep-0488/
+# See: https://github.com/python/cpython/blob/c48d606adcef395e59fd555496c42203b01dd3e8/Lib/importlib/_bootstrap_external.py#L252-L260
+
+# == .pyc header ==
+# See: https://github.com/python/cpython/blob/3.7/Lib/importlib/_bootstrap_external.py
+_RAW_MAGIC_NUMBER = 3394  # Python 3.7b5
+# 00000000: 420d 0d0a                                B...
+#                     (timestamp .pyc)
+#                       mtime = 2019-08-10T03:28:27+00:00
+#                           source_size = 171
+# 00000004:           0000 0000 db39 4e5d ab00 0000      .....9N]....
 
 # Reference:
 # https://github.com/python/cpython/blob/3.7/Include/code.h#L21-L51
@@ -14,7 +23,19 @@ CO_NOFREE    = 0x0040
 
 # == Code object [module] ==
 #
+#           𝚌
+# argscount = 0
+#      kwonlyargcount = 0
+#                       nlocals = 0
+#                               stacksize = 2
 # 00000010: e300 0000 0000 0000 0000 0000 0002 0000  ................
+#  co_flags = CO_NOFREE
+#                       𝚜  12
+#   0000: 6400 LOAD_CONST       0x00 ('greet')
+#   0002: 6401 LOAD_CONST       0x01 (<function greet()>)
+#   0004: 8400 MAKE_FUNCTION    0x00 <no flags set>
+#   0006: 5a00 STORE_NAME       0x00 (greet)
+#   0008: 6400 LOAD_CONST       0x02 (None)
 # 00000020: 0040 0000 0073 0c00 0000 6400 6401 8400  .@...s....d.d...
 # 00000030: 5a00 6402 5300 2903                      Z.d.S.).
 
