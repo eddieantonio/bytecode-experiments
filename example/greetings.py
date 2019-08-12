@@ -1,3 +1,4 @@
+# greetings.py
 def greet():
     greeting = "Hello"
     recipient = "World"
